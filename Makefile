@@ -9,8 +9,8 @@ CXX=clang++
 INCLUDE_NAME=esc
 LIB_NAME=libesc.so
 TARGET=$(BINDIR)/$(LIB_NAME)
-BINARIES=
-SRC=$(SRCDIR)/esc.cpp
+BINARIES=$(BINDIR)/esc
+SRC=$(SRCDIR)/esc.cpp $(SRCDIR)/context.cpp $(SRCDIR)/lex.cpp $(SRCDIR)/parse.cpp
 OBJ=$(patsubst $(SRCDIR)/%,$(OBJDIR)/%.o,$(SRC))
 
 CFLAGS:=-Os -g -Wall -Wextra -Werror -pedantic -std=c11 -fPIC -pthread
@@ -39,8 +39,11 @@ $(OBJDIR)/%.cpp.o: $(SRCDIR)/%.cpp $(OBJDIR) $(DBDIR)
 compile_commands.json: $(OBJ) $(DBDIR)
 	sed -e '1s/^/[\n/' -e '$$s/,$$/\n]/' $(patsubst $(OBJDIR)/%.cpp.o,$(DBDIR)/%.cpp.o.json,$<) > $@
 
-$(TARGET): $(OBJ) $(LIB)
+$(TARGET): $(OBJ)
 	$(CXX) $(LDFLAGS) -shared -o $@ $^
+
+$(BINDIR)/esc: $(OBJ) $(SRCDIR)/main.cpp
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
 
 $(OBJDIR): $(BINDIR)
 	mkdir -p $(OBJDIR)
