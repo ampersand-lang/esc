@@ -10,7 +10,7 @@ INCLUDE_NAME=esc
 LIB_NAME=libesc.so
 TARGET=$(BINDIR)/$(LIB_NAME)
 BINARIES=$(BINDIR)/esc
-SRC=$(SRCDIR)/esc.cpp
+SRC=$(SRCDIR)/esc.cpp $(SRCDIR)/context.cpp $(SRCDIR)/lex.cpp $(SRCDIR)/parse.cpp
 OBJ=$(patsubst $(SRCDIR)/%,$(OBJDIR)/%.o,$(SRC))
 
 CFLAGS:=-Os -g -Wall -Wextra -Werror -pedantic -std=c11 -fPIC -pthread
